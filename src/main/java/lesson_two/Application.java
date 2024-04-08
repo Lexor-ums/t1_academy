@@ -6,22 +6,22 @@ import java.util.stream.Collectors;
 
 public class Application {
 
-    enum PositionEnum{
+    enum Position {
         ENGINEER,
         NOT_ENGINEER
     }
     public static class Employee {
-        public Employee(PositionEnum postion, int age, String name) {
+        public Employee(Position postion, int age, String name) {
 
             this.postion = postion;
             this.age = age;
             this.name = name;
         }
-        private final PositionEnum postion;
+        private final Position postion;
         private final int age;
         private final String name;
 
-        public PositionEnum getPostion() {
+        public Position getPostion() {
             return postion;
         }
 
@@ -64,24 +64,25 @@ public class Application {
         //`Имеется список объектов типа Сотрудник (имя, возраст, должность),
         // необходимо получить список имен 3 самых старших сотрудников с должностью «Инженер», в порядке убывания возраста
         List<Employee> employees = List.of(
-                new Employee(PositionEnum.ENGINEER, 53, "Василий"),
-                new Employee(PositionEnum.ENGINEER, 27, "Алёша"),
-                new Employee(PositionEnum.ENGINEER, 42, "Дмитрий"),
-                new Employee(PositionEnum.NOT_ENGINEER, 40, "Караматулло")
+                new Employee(Position.ENGINEER, 53, "Василий"),
+                new Employee(Position.ENGINEER, 27, "Алёша"),
+                new Employee(Position.ENGINEER, 42, "Дмитрий"),
+                new Employee(Position.NOT_ENGINEER, 40, "Караматулло")
         );
-        List<Employee> engineersList = employees.stream()
-                .filter(employee -> employee.getPostion().equals(PositionEnum.ENGINEER))
+        List<String> engineersList = employees.stream()
+                .filter(employee -> employee.getPostion().equals(Position.ENGINEER))
                 .sorted(Comparator.comparing(Employee::getAge).reversed())
+                .map(Employee::getName)
                 .toList();
         assert engineersList.size() == 3;
-        assert engineersList.get(0).getName().equals("Василий");
-        assert engineersList.get(1).getName().equals("Дмитрий");
-        assert engineersList.get(2).getName().equals("Алёша");
+        assert engineersList.get(0).equals("Василий");
+        assert engineersList.get(1).equals("Дмитрий");
+        assert engineersList.get(2).equals("Алёша");
 
 
         //`Имеется список объектов типа Сотрудник (имя, возраст, должность), посчитайте средний возраст сотрудников с должностью «Инженер»
         double averageAge = employees.stream()
-                .filter(employee -> employee.getPostion().equals(PositionEnum.ENGINEER))
+                .filter(employee -> employee.getPostion().equals(Position.ENGINEER))
                 .mapToInt(Employee::getAge)
                 .average()
                 .orElseThrow(() -> new RuntimeException("Список пуст"));
