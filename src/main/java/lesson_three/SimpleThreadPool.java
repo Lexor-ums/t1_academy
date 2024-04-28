@@ -1,5 +1,4 @@
 package lesson_three;
-import org.openjdk.nashorn.internal.IntDeque;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +17,6 @@ public class SimpleThreadPool implements Runnable{
 
     public SimpleThreadPool(int threadCount)
     {
-        IntDeque
         this.threadCount = threadCount;
         busyThreads = new ArrayList<>(threadCount);
     }
@@ -33,6 +31,11 @@ public class SimpleThreadPool implements Runnable{
     }
 
     public void shutDown() {
+        isShuttingDown.set(true);
+        busyThreads.forEach(Thread::interrupt);
+    }
+
+    public void awaitTerminating() {
         isShuttingDown.set(true);
         String remainigTasks = tasksList.stream().map(runnable -> ((SimpleTask) runnable).getName()).collect(Collectors.joining(","));
         System.out.println(String.format("Thread pool is shutting down! Tasks will not be started: %s", remainigTasks));

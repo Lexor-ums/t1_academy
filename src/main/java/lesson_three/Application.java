@@ -22,6 +22,7 @@ public class Application {
         poolThread.start();
         tasks.forEach(simpleThreadPool::execute);
         Thread.sleep(10000);
+        simpleThreadPool.awaitTerminating();
         simpleThreadPool.shutDown();
         try {
             simpleThreadPool.execute(new SimpleTask("task 12 ", 12));
