@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Getter
 @Configuration
-@PropertySource("application.properties")
+@PropertySource("classpath:application.properties")
 public class DatasourceProperties {
     @Value("${spring.datasource.url}")
     private String url;
