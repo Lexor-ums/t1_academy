@@ -1,6 +1,7 @@
 package productmodule.service;
 
-import productmodule.dto.response.ProductResponseDto;
+
+import hometasklib.dto.response.ProductResponseDto;
 
 import java.util.List;
 

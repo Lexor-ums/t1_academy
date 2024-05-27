@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * @author YStepanov
  */
 @Configuration
-@ComponentScan(basePackages = "lesson_four")
+@ComponentScan(basePackages = "productmodule")
 //@PropertySources({
 //        @PropertySource("classpath:./application.properties"),
 //})

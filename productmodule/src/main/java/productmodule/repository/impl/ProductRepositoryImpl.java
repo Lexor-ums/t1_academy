@@ -1,6 +1,7 @@
 package productmodule.repository.impl;
 
-import productmodule.mapping.ProductMapper;
+import hometasklib.dto.request.PaymentRequest;
+import productmodule.exceptions.WrongBalanceException;
 import productmodule.model.Product;
 import productmodule.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * @author YStepanov
@@ -20,11 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository {
     private final DataSource dataSource;
-    private final ProductMapper productMapper;
 
     private static final String ADD_PRODUCT_QUERY = "INSERT INTO products VALUES (?, ?, ?, ?)";
     private static final String GET_PRODUCT_BY_ID_QUERY = "SELECT * FROM products WHERE id = ?";
     private static final String GET_ALL_PRODUCTS_BY_USER_QUERY = "SELECT * FROM products WHERE user_id = ?";
+    private static final String PROCESS_PAYMENT =
+            "UPDATE products SET balance = balance - ? WHERE user_id = ? AND id = ? RETURNING *;";
     @Override
     public Product addProduct(Product product) {
         try (Connection connection = dataSource.getConnection()) {
@@ -42,30 +43,38 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public ResultSet getProductById(Long id) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(GET_PRODUCT_BY_ID_QUERY);
             statement.setLong(1, id);
-            ResultSet res = statement.executeQuery();
-            List<Product> userList = productMapper.mapRow(res, 0);
-            if (userList.size() > 1) {
-                throw new RuntimeException("Request return more then one row");
-            }
-            return userList.get(0);
+            return statement.executeQuery();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Product> getAllUserProducts(Long userId) {
+    public ResultSet getAllUserProducts(Long userId) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(GET_ALL_PRODUCTS_BY_USER_QUERY);
             statement.setLong(1, userId);
-            ResultSet res = statement.executeQuery();
-            return productMapper.mapRow(res, 0);
+            return statement.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Integer processPayment(PaymentRequest paymentRequest) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(PROCESS_PAYMENT);
+            statement.setBigDecimal(1, paymentRequest.amount());
+            statement.setLong(2, paymentRequest.userId());
+            statement.setLong(3, paymentRequest.productId());
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new WrongBalanceException(paymentRequest.userId(), paymentRequest.productId());
         }
     }
 }

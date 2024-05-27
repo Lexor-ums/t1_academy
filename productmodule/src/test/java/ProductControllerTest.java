@@ -1,8 +1,6 @@
-import lesson_four.ProductType;
-import lesson_four.controller.ProductController;
-import lesson_four.dto.response.ProductResponseDto;
-import lesson_four.mapping.ProductResponseDtoMapper;
-import lesson_four.service.ProductService;
+
+import hometasklib.dto.response.ProductResponseDto;
+import hometasklib.enums.ProductType;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import productmodule.mapping.ProductResponseDtoMapper;
+import productmodule.service.ProductService;
 
 
 import java.util.List;
@@ -54,10 +54,10 @@ public class ProductControllerTest {
         Mockito.when(productService.getProduct(1L)).thenReturn(getProduct());
         mvc.perform(get("/product/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.accountNumber").value("1234"))
-                .andExpect(jsonPath("$.balance").value(12))
-                .andExpect(jsonPath("$.productType").value(ProductType.ACCOUNT.toString()));
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.payload.accountNumber").value("1234"))
+                .andExpect(jsonPath("$.payload.balance").value(12))
+                .andExpect(jsonPath("$.payload.productType").value(ProductType.ACCOUNT.toString()));
     }
 
     @SneakyThrows

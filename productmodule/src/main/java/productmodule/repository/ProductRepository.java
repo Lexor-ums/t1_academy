@@ -1,15 +1,20 @@
 package productmodule.repository;
 
 
+import hometasklib.dto.request.PaymentRequest;
 import productmodule.model.Product;
 
-import java.util.List;
+import java.sql.ResultSet;
 
 /**
  * @author YStepanov
  */
 public interface ProductRepository {
     Product addProduct(Product product);
-    Product getProductById(Long id);
-    List<Product> getAllUserProducts(Long userId);
+
+    ResultSet getProductById(Long id);
+
+    ResultSet getAllUserProducts(Long userId);
+
+    Integer processPayment(PaymentRequest paymentRequest);
 }

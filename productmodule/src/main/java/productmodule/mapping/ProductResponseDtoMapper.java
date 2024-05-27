@@ -1,7 +1,7 @@
 package productmodule.mapping;
 
+import hometasklib.dto.response.ProductResponseDto;
 import org.mapstruct.Mapper;
-import productmodule.dto.response.ProductResponseDto;
 import productmodule.model.Product;
 
 import java.util.List;

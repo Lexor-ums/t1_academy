@@ -1,7 +1,7 @@
-package productmodule.dto.response;
+package hometasklib.dto.response;
 
-
-import productmodule.enums.ProductType;
+import hometasklib.enums.ProductType;
+import lombok.Data;
 
 /**
  * @author YStepanov

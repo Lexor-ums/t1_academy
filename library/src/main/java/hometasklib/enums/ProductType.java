@@ -1,4 +1,4 @@
-package productmodule.enums;
+package hometasklib.enums;
 
 /**
  * @author YStepanov
