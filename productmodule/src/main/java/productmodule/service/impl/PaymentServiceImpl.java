@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final ProductRepository productRepository;
     @Override
     public void processPayment(PaymentRequest paymentRequest) {
-        Integer rowsModified = productRepository.processPayment(paymentRequest);
+        Integer rowsModified = productRepository.processPayment(paymentRequest.userId(), paymentRequest.productId(), paymentRequest.amount());
         if (rowsModified == 0) {
             throw new UserNotFoundException(paymentRequest.userId());
         }
