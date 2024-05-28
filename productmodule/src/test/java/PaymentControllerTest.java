@@ -59,7 +59,7 @@ public class PaymentControllerTest {
     @Test
     public void processPaymentTest() throws Exception {
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, BigDecimal.valueOf(235));
-        Mockito.when(productRepository.processPayment(paymentRequest)).thenReturn(1);
+        Mockito.when(productRepository.processPayment(paymentRequest.userId(), paymentRequest.productId(), paymentRequest.amount())).thenReturn(1);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
@@ -71,7 +71,7 @@ public class PaymentControllerTest {
     @Test
     public void processPaymentWrongBalanceTest() throws Exception {
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, BigDecimal.valueOf(235));
-        Mockito.when(productRepository.processPayment(paymentRequest))
+        Mockito.when(productRepository.processPayment(paymentRequest.userId(), paymentRequest.productId(), paymentRequest.amount()))
                 .thenThrow(new WrongBalanceException(paymentRequest.userId(), paymentRequest.productId()));
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);

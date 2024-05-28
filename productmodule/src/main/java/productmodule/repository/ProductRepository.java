@@ -1,20 +1,27 @@
 package productmodule.repository;
 
 
-import hometasklib.dto.request.PaymentRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import productmodule.model.Product;
 
-import java.sql.ResultSet;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author YStepanov
  */
-public interface ProductRepository {
-    Product addProduct(Product product);
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    @Query(value = "SELECT p FROM Product p WHERE id =:id ")
+    Product getProductById(Long id);
 
-    ResultSet getProductById(Long id);
+    @Query(value = "SELECT p FROM Product p")
+    List<Product> getAllUserProducts(Long userId);
 
-    ResultSet getAllUserProducts(Long userId);
-
-    Integer processPayment(PaymentRequest paymentRequest);
+    @Modifying
+    @Query(value = "UPDATE Product p SET p.balance = p.balance - :amount WHERE p.user.id = :userId AND p.id = :productId")
+    Integer processPayment(Long userId, Long productId, BigDecimal amount);
 }
