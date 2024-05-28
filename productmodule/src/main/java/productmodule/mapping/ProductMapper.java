@@ -1,9 +1,9 @@
 package productmodule.mapping;
 
 
+import hometasklib.enums.ProductType;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import productmodule.enums.ProductType;
 import productmodule.model.Product;
 
 import java.sql.ResultSet;

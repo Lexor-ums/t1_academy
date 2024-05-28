@@ -1,9 +1,9 @@
 package productmodule.model;
 
+import hometasklib.enums.ProductType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import productmodule.enums.ProductType;
 
 /**
  * @author YStepanov
